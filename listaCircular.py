@@ -1,3 +1,11 @@
+
+
+# Mudar nodo para cada um ter uma lista e se é ativo ou não
+
+# Procura no primeiro nodo ativo que encontrar  
+# O proximo é ativo ? Se não, procura o valor nele, 
+# Se o proximo nodo for ativo para a loop e vai pro proximo nodo ativo procurar os valores 
+
 class Nodo():
     def __init__(self,data):
         self.data = data
@@ -34,10 +42,25 @@ class CircleList():
                  self.last.next = self.first
 
         def removeInit(self):
-             pass
-        def removeEnd(self):
-             pass
+            if self.empty():
+                print("List empty")
+            elif self.first == self.last:
+                self.first = self.last = None
+            else:
+                self.first = self.first.next
+                self.last.next = self.first 
 
+        def removeEnd(self):
+            if self.empty():
+                print("List empty")
+            elif self.first == self.last:
+                self.first = self.last = None
+            else:
+                aux = self.first
+                while aux.next != self.last:
+                    aux = aux.next
+                aux.next = self.first
+                self.last = aux
         def runList(self):
             if(self.first == None):
                  print("List empty")
@@ -58,4 +81,5 @@ lista.addEnd(40)
 lista.addEnd(50)
 lista.addEnd(60)
 lista.addInit(70)
+lista.removeEnd()
 lista.runList()
