@@ -139,7 +139,13 @@ class CircleList():
                     break
         print(f"Value '{value}' not found in any active node.")
 
-
+    def delete_value(self, value):
+        for node in self.active_nodes:
+            if value in node.values:
+                node.values.remove(value)
+                print(f"Deleted value '{value}' from Node ID: {node.data}")
+                return
+        print(f"Value '{value}' not found in any active node.")
 # Criando a lista circular e ativando os nós desejados
 lista = CircleList()
 for i in range(20):
@@ -184,6 +190,7 @@ lista.runList()
 # Ativando novamente um nó
 lista.activateNode(5)
 print("\n\n\n")
+lista.delete_value(60)
 lista.runList()
 
 # Procurando valores na lista
