@@ -1,46 +1,50 @@
-class TabelaHashDistribuida:
-    def __init__(self, num_buckets):
-        self.num_buckets = num_buckets  # Número de buckets na tabela hash
-        self.buckets = [[] for _ in range(num_buckets)]  # Lista de listas para armazenar os elementos
+from hashlib import sha256
+class HashTable():
+    class Element:
+        def __init__(self,key,value):
+            self.key = key
+            self.value = value
 
-    def funcao_hash(self, chave):
-        return hash(chave) % self.num_buckets  # Função de hash para determinar o índice do bucket
 
-    def inserir(self, chave, valor):
-        valor_hash = self.funcao_hash(chave)  # Calcula o índice do bucket usando a função de hash
-        bucket = self.buckets[valor_hash]  # Obtém o bucket correspondente
-        for i, (chave_existente, _) in enumerate(bucket):
-            if chave_existente == chave:
-                bucket[i] = (chave, valor)  # Atualiza o valor se a chave já existir
-                return
-        bucket.append((chave, valor))  # Adiciona um novo par chave-valor ao bucket
+        def __init__(self):
+            self.capacity = 5 # internal table capacity/size
+            self.internList = [[] for _ in range(self.capacity)] 
+            self.length = 0 # number of elements saved in the hash table
+        
+        def __len__(self):
+            return self.length
+        
+        
+        def hashCreate(self, key):
+            codificado = str(key).encode()
+            return int(sha256(codificado).hexdigest(), 16)
+        
+        # def verifyHash(key):
+        #     hash(key)
 
-    def obter(self, chave):
-        valor_hash = self.funcao_hash(chave)  # Calcula o índice do bucket usando a função de hash
-        bucket = self.buckets[valor_hash]  # Obtém o bucket correspondente
-        for chave_existente, valor in bucket:
-            if chave_existente == chave:
-                return valor  # Retorna o valor correspondente à chave, se existir
-        return None  # Retorna None se a chave não for encontrada
+        def find_index(self,key):
+            return self.hashCreate(key) % self.capacity
 
-    def remover(self, chave):
-        valor_hash = self.funcao_hash(chave)  # Calcula o índice do bucket usando a função de hash
-        bucket = self.buckets[valor_hash]  # Obtém o bucket correspondente
-        for i, (chave_existente, _) in enumerate(bucket):
-            if chave_existente == chave:
-                del bucket[i]  # Remove o par chave-valor do bucket
-                return
-        raise KeyError("Chave não encontrada na tabela hash.")  # Levanta uma exceção se a chave não for encontrada
+        def setItem(self,key,value):
+            # self.verifyHash(key)
+
+            index = self.find_index(key)
+
+            for element in self.internList[index]:
+                if element.key == key:
+                    element.value = value
+                    return
+            
+            new_element = self.Element(key, value)
+            print(new_element)
+            self.internList[index].append(new_element)
+            self.length += 1
+
+
+def main():
+    node = HashTable()
+    node.setitem('1', 'Joao')
+
 
 if __name__ == "__main__":
-    dht = TabelaHashDistribuida(num_buckets=15)
-    dht.inserir("apple", 5)
-    dht.inserir("apple2", 5)
-    dht.inserir("apple3", 5)
-    dht.inserir("apple4", 5)
-    dht.inserir("banana", 7)
-    dht.inserir("orange", 3)
-    dht.inserir("grape", 9)
-
-    print(dht.obter("apple2"))
-    
+    main()
